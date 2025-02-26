@@ -1,17 +1,18 @@
-window.onload = function() {
-			
-			if(document.getElementById('errors').innerText != ""){
-				setTimeout(function() {
-					console.log("errors")
-				}, 2000);
-				alert(document.getElementById('errors').innerText);
-			}
-			
-			if(document.getElementById('messages').innerText != "" && document.getElementById('messages').innerText.trim() !== ""){
-				setTimeout(function() {
-					console.log("messages")
-				}, 1000);
-				alert(document.getElementById('messages').innerText.trim());
-				window.location = "/CustomerSystem_Spring/T002.do";
-			}
-		}
+window.addEventListener("load", function(){
+    const errorElement = document.getElementById('errors');
+    const messageElement = document.getElementById('messages');
+
+    // Kiểm tra xem có lỗi hay không
+    if (errorElement && errorElement.textContent.trim() !== "") {
+         setTimeout(function(){
+              alert(errorElement.textContent.trim());
+         }, 2000); // Delay 2 giây nếu cần
+    }
+    // Nếu không có lỗi, kiểm tra message
+    else if (messageElement && messageElement.textContent.trim() !== "") {
+         setTimeout(function(){
+              alert(messageElement.textContent.trim());
+              window.location.href = "/CustomerSystem_Spring/T002.do";
+         }, 1000); // Delay 1 giây nếu cần
+    }
+});
