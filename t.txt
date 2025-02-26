@@ -1,0 +1,17 @@
+window.onload = function() {
+			
+			if(document.getElementById('errors').innerText != ""){
+				setTimeout(function() {
+					console.log("errors")
+				}, 2000);
+				alert(document.getElementById('errors').innerText);
+			}
+			
+			if(document.getElementById('messages').innerText != "" && document.getElementById('messages').innerText.trim() !== ""){
+				setTimeout(function() {
+					console.log("messages")
+				}, 1000);
+				alert(document.getElementById('messages').innerText.trim());
+				window.location = "/CustomerSystem_Spring/T002.do";
+			}
+		}
