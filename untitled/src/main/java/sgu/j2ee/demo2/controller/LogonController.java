@@ -20,9 +20,9 @@ public class LogonController {
     }
 
     @PostMapping("/Logon.do")
-    public String processLogon(HttpServletRequest request, HttpServletResponse response,
-                               String username, String password) {
-
+    public String processLogon(HttpServletRequest request, HttpServletResponse response) {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
         // Perform actual authentication logic here
         boolean isAuthenticated = authenticate(username, password);
 
