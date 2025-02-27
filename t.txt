@@ -2,3 +2,96 @@
      như là em có 3 link là logon.do, search.do, edit.do => lúc này em security filter search.do và edit.do, khi nào tôn tại session thì mới cho hiển thị. Còn logon.do thì không cần filter
     Mở rộng hơn nữa thì em sẽ có link localhost:8080/CustomerSystem/Logon.do, trường hợp chưa logon mà người dùng copy link  localhost:8080/CustomerSystem/Search.do thì sẽ bị chặn không vào được
     Tương tự cho các link khác như là CallDo.do, Abc.do , những link này ko có trong project mình thì cũng không vào được
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+	"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>  
+   <session-factory>  
+      <property name="connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>  
+      <property name="connection.url">jdbc:sqlserver://172.16.10.73:1433;databaseName=CustomerSystem_Vy</property>  
+      <property name="connection.username">vy-dv</property>  
+      <property name="connection.password">Doanvyvy123</property>  
+      <property name="hbm2ddl.auto">update</property>
+      <property name="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</property>  
+      <property name="hibernate.current_session_context_class">thread</property>
+   </session-factory>  
+</hibernate-configuration>
+
+Referenced file contains errors (http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd).  For more information, right click on the message in the Problems View and select "Show Details..."
+
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE web-app
+  PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"
+  "http://java.sun.com/j2ee/dtds/web-app_2_2.dtd">
+
+<web-app>
+  <display-name>Struts Blank Application</display-name>
+ 
+  <context-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>/WEB-INF/applicationContext.xml</param-value>
+   </context-param>
+ <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  <!-- Standard Action Servlet Configuration (with debugging) -->
+  <servlet>
+    <servlet-name>action</servlet-name>
+    <servlet-class>org.apache.struts.action.ActionServlet</servlet-class>
+    <init-param>
+      <param-name>config</param-name>
+      <param-value>/WEB-INF/struts-config.xml</param-value>
+    </init-param>
+    <init-param>
+      <param-name>debug</param-name>
+      <param-value>2</param-value>
+    </init-param>
+    <init-param>
+      <param-name>detail</param-name>
+      <param-value>2</param-value>
+    </init-param>
+    <load-on-startup>2</load-on-startup>
+  </servlet>
+
+  <!-- Standard Action Servlet Mapping -->
+  <servlet-mapping>
+    <servlet-name>action</servlet-name>
+    <url-pattern>*.do</url-pattern>
+  </servlet-mapping>
+
+  <!-- The Usual Welcome File List -->
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+
+  <!-- Struts Tag Library Descriptors -->
+  <taglib>
+    <taglib-uri>/tags/struts-bean</taglib-uri>
+    <taglib-location>/WEB-INF/struts-bean.tld</taglib-location>
+  </taglib>
+
+  <taglib>
+    <taglib-uri>/tags/struts-html</taglib-uri>
+    <taglib-location>/WEB-INF/struts-html.tld</taglib-location>
+  </taglib>
+
+  <taglib>
+    <taglib-uri>/tags/struts-logic</taglib-uri>
+    <taglib-location>/WEB-INF/struts-logic.tld</taglib-location>
+  </taglib>
+
+  <taglib>
+    <taglib-uri>/tags/struts-nested</taglib-uri>
+    <taglib-location>/WEB-INF/struts-nested.tld</taglib-location>
+  </taglib>
+
+  <taglib>
+    <taglib-uri>/tags/struts-tiles</taglib-uri>
+    <taglib-location>/WEB-INF/struts-tiles.tld</taglib-location>
+  </taglib>
+    
+</web-app>
+The content of element type "web-app" must match "(icon?,display-name?,description?,distributable?,context-param*,servlet*,servlet-mapping*,session-config?,mime-mapping*,welcome-file-list?,error-page*,taglib*,resource-ref*,security-constraint*,login-config?,security-role*,env-entry*,ejb-ref*)".
