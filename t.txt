@@ -1,18 +1,4 @@
-window.addEventListener("load", function(){
-    const errorElement = document.getElementById('errors');
-    const messageElement = document.getElementById('messages');
-
-    // Kiểm tra xem có lỗi hay không
-    if (errorElement && errorElement.textContent.trim() !== "") {
-         setTimeout(function(){
-              alert(errorElement.textContent.trim());
-         }, 2000); // Delay 2 giây nếu cần
-    }
-    // Nếu không có lỗi, kiểm tra message
-    else if (messageElement && messageElement.textContent.trim() !== "") {
-         setTimeout(function(){
-              alert(messageElement.textContent.trim());
-              window.location.href = "/CustomerSystem_Spring/T002.do";
-         }, 1000); // Delay 1 giây nếu cần
-    }
-});
++ 1 project có nhiều link, file (css,js). Thì em sẽ tiến hành filter sao cho link có thể chạy được khi có session
+     như là em có 3 link là logon.do, search.do, edit.do => lúc này em security filter search.do và edit.do, khi nào tôn tại session thì mới cho hiển thị. Còn logon.do thì không cần filter
+    Mở rộng hơn nữa thì em sẽ có link localhost:8080/CustomerSystem/Logon.do, trường hợp chưa logon mà người dùng copy link  localhost:8080/CustomerSystem/Search.do thì sẽ bị chặn không vào được
+    Tương tự cho các link khác như là CallDo.do, Abc.do , những link này ko có trong project mình thì cũng không vào được
