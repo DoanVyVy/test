@@ -1,0 +1,229 @@
+Dưới đây là một cách tiếp cận để tích hợp Struts 1 Tiles vào các trang JSP hiện có bằng cách tách giao diện (layout) ra thành các file riêng và “nhúng” (embed) nội dung của từng trang vào template chung.
+
+Bạn có thể thực hiện theo các bước sau:
+
+---
+
+## 1. Tạo File Template Chung (layout.jsp)
+
+File này chứa cấu trúc HTML chung (header, footer, phần include CSS/JS, …). Ví dụ:
+
+```jsp
+<%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title><tiles:insertAttribute name="title" /></title>
+  <style type="text/css">
+    <tiles:insertAttribute name="css" ignore="true"/>
+  </style>
+</head>
+<body>
+  <h1>Training</h1>
+  <hr />
+  <!-- Phần thông tin người dùng nếu cần -->
+  <div class="infor">
+    <tiles:insertAttribute name="userInfo" ignore="true"/>
+  </div>
+  <!-- Nội dung chính của trang -->
+  <tiles:insertAttribute name="body" />
+  
+  <footer>
+    <hr />
+    Copyright (c) 2000-2008 FUJINET,
+    All Rights Reserved.
+  </footer>
+  <script type="text/javascript" defer>
+    <tiles:insertAttribute name="js" ignore="true"/>
+  </script>
+</body>
+</html>
+```
+
+File trên sẽ đóng vai trò làm “khung” cho các trang khác.
+
+---
+
+## 2. Tách Các Phần Nội Dung Riêng (Content JSP)
+
+Ví dụ, với trang **Login** bạn sẽ tách phần nội dung thành file riêng (ví dụ: **loginContent.jsp**) chứa phần form và các thành phần cụ thể:
+
+```jsp
+<%@ taglib uri="/tags/struts-html" prefix="html" %>
+<%@ taglib uri="/tags/struts-bean" prefix="bean" %>
+<%@ taglib uri="/tags/struts-logic" prefix="logic" %>
+<!-- Nội dung riêng của trang Login -->
+<h3>Login</h3>
+<div class="container">
+  <h2>LOGIN</h2>
+  <label class="errorMessage" id="lbErrorMessage">
+    <html:errors/>
+  </label>
+  <html:form action="/T001">
+    <table>
+      <tr>
+        <td><label>UserId:</label></td>
+        <td><html:text name="LoginForm" property="userId" maxlength="8" /></td>
+      </tr>
+      <tr>
+        <td><label>Password:</label></td>
+        <td><html:password name="LoginForm" property="password" maxlength="8"/></td>
+      </tr>
+    </table>
+    <div style="margin-top: 40px;">
+      <button name="btnLogin" id="btnLogin" type="submit" value="btnSubmit">Login</button>
+      <button id="btnClear" style="margin-left: 150px;" type="button" onclick="resetAll()">Clear</button>
+    </div>
+  </html:form>
+  <html:javascript formName="LoginForm"/>
+</div>
+```
+
+Tương tự, bạn có thể tách phần nội dung của trang **Edit** (ví dụ: **editContent.jsp**) và **Import** (ví dụ: **importContent.jsp**) theo cấu trúc riêng của chúng.
+
+---
+
+## 3. Cấu Hình Tiles Definitions (tiles-defs.xml)
+
+Tạo một file cấu hình (thông thường đặt ở WEB-INF) để định nghĩa các “definition” cho từng trang, kế thừa từ template chung. Ví dụ:
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC 
+  "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+  "http://jakarta.apache.org/tiles/dtds/tiles-config_1_1.dtd">
+<tiles-definitions>
+  <!-- Định nghĩa cơ sở dùng chung cho các trang -->
+  <definition name="baseLayout" template="/WEB-INF/layout/layout.jsp">
+    <put-attribute name="title" value=""/>
+    <put-attribute name="css" value=""/>
+    <put-attribute name="userInfo" value=""/>
+    <put-attribute name="body" value=""/>
+    <put-attribute name="js" value=""/>
+  </definition>
+  
+  <!-- Định nghĩa cho trang Login -->
+  <definition name="loginLayout" extends="baseLayout">
+    <put-attribute name="title" value="Login"/>
+    <!-- Nếu muốn include CSS từ file JSP, bạn có thể sử dụng include directive -->
+    <put-attribute name="css">
+      <%@ include file="/WEB-INF/jsp/include/T001.css" %>
+    </put-attribute>
+    <put-attribute name="body" value="/WEB-INF/jsp/loginContent.jsp"/>
+    <put-attribute name="js">
+      <script type="text/javascript">
+        function resetAll() {
+          var errorMessage = document.getElementById("lbErrorMessage");
+          if(errorMessage){
+            errorMessage.innerText = "";
+          }
+          document.querySelector('[name="userId"]').value = "";
+          document.querySelector('[name="password"]').value = "";
+        }
+      </script>
+    </put-attribute>
+  </definition>
+  
+  <!-- Định nghĩa cho trang Edit -->
+  <definition name="editLayout" extends="baseLayout">
+    <put-attribute name="title" value="Edit"/>
+    <put-attribute name="css">
+      <%@ include file="/WEB-INF/jsp/include/T003.css" %>
+    </put-attribute>
+    <put-attribute name="body" value="/WEB-INF/jsp/editContent.jsp"/>
+    <put-attribute name="js">
+      <%@ include file="/WEB-INF/jsp/include/T003.js" %>
+    </put-attribute>
+  </definition>
+  
+  <!-- Định nghĩa cho trang Import -->
+  <definition name="importLayout" extends="baseLayout">
+    <put-attribute name="title" value="Import"/>
+    <put-attribute name="css">
+      <%@ include file="/WEB-INF/jsp/include/T004.css" %>
+    </put-attribute>
+    <put-attribute name="body" value="/WEB-INF/jsp/importContent.jsp"/>
+    <put-attribute name="js">
+      <script type="text/javascript">
+        // Ví dụ JS cho trang Import
+        let file = document.querySelector("[name=file]");
+        file.addEventListener("change", function(e){
+          let fileName = document.getElementById("fileName");
+          fileName.value = file.value.split( '\\' ).pop();
+        });
+        function getFile(){
+          document.querySelector("[name='file']").click();
+        }
+        window.addEventListener("load", function(){
+          const errorElement = document.getElementById('errors');
+          const messageElement = document.getElementById('messages');
+          if (errorElement && errorElement.textContent.trim() !== "") {
+            setTimeout(function(){
+              alert(errorElement.textContent.trim());
+            }, 100);
+          }
+          else if (messageElement && messageElement.textContent.trim() !== "") {
+            setTimeout(function(){
+              alert(messageElement.textContent.trim());
+              window.location.href = "/CustomerSystem_Spring/T002.do";
+            }, 100);
+          }
+        });
+      </script>
+    </put-attribute>
+  </definition>
+</tiles-definitions>
+```
+
+*Chú ý:* Bạn có thể thay đổi cách include CSS/JS tùy vào cấu trúc dự án. Một số dự án chuyển các file CSS, JS ra ngoài thành file tĩnh để trình duyệt tải riêng.
+
+---
+
+## 4. Cập Nhật Các File JSP Chính
+
+Thay vì có file JSP “đầy đủ” (bao gồm toàn bộ HTML, head, body), bạn sẽ gọi Tiles definition trong file “wrapper” hoặc cấu hình định tuyến của Struts. Ví dụ, đối với trang Login, trong struts-config.xml bạn có thể mapping action trỏ tới Tiles definition “loginLayout”. Khi đó, trình duyệt sẽ render template chung và chèn nội dung của **loginContent.jsp** vào vị trí `<tiles:insertAttribute name="body" />`.
+
+Nếu bạn muốn “nhúng trực tiếp” các attribute trong file JSP của trang, bạn có thể làm như sau trong file login.jsp:
+
+```jsp
+<%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
+<tiles:insertDefinition name="loginLayout">
+  <tiles:putAttribute name="title" value="Login"/>
+  <tiles:putAttribute name="css">
+    <%@ include file="/WEB-INF/jsp/include/T001.css" %>
+  </tiles:putAttribute>
+  <tiles:putAttribute name="body">
+    <!-- Nội dung Login đã được tách ra loginContent.jsp, hoặc có thể viết trực tiếp tại đây -->
+    <h3>Login</h3>
+    <div class="container">
+      <!-- ... code form ... -->
+    </div>
+  </tiles:putAttribute>
+  <tiles:putAttribute name="js">
+    <script type="text/javascript">
+      function resetAll() {
+        var errorMessage = document.getElementById("lbErrorMessage");
+        if(errorMessage){
+          errorMessage.innerText = "";
+        }
+        document.querySelector('[name="userId"]').value = "";
+        document.querySelector('[name="password"]').value = "";
+      }
+    </script>
+  </tiles:putAttribute>
+</tiles:insertDefinition>
+```
+
+Cách này cho phép bạn “nhúng trực tiếp” nội dung vào trong file JSP nếu không muốn dùng file riêng cho nội dung.
+
+---
+
+## Tổng Kết
+
+1. **Tạo template chung (layout.jsp):** Chứa cấu trúc HTML cơ bản, phần header, footer, CSS, JS.
+2. **Tách các phần nội dung riêng:** Tạo file riêng (ví dụ: loginContent.jsp, editContent.jsp, importContent.jsp) chứa nội dung riêng của từng trang.
+3. **Định nghĩa Tiles trong file cấu hình (tiles-defs.xml):** Kế thừa từ layout chung và chỉ định các attribute như title, css, body, js.
+4. **Cập nhật các file JSP chính:** Thay vì viết toàn bộ HTML trong mỗi file, dùng `<tiles:insertDefinition>` để “nhúng” nội dung vào template chung hoặc định tuyến qua Struts.
+
+Với cách làm này, bạn sẽ dễ dàng quản lý giao diện chung của hệ thống và có thể tái sử dụng các thành phần (header, footer, …) cho nhiều trang khác nhau. Đây là một phương pháp hiệu quả khi áp dụng Struts 1 Tiles để “tách file JSP” ra và tích hợp trực tiếp nội dung vào trong cấu trúc Tiles.
