@@ -1,0 +1,100 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="utf-8"%>
+
+<%@ taglib uri="/tags/struts-bean" prefix="bean" %>
+<%@ taglib uri="/tags/struts-html" prefix="html" %>
+<%@ taglib uri="/tags/struts-logic" prefix="logic" %>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Import</title>
+
+<style type="text/css">
+	<%@include file="../css/T004.css"%>
+</style>
+
+</head>
+<body>
+	<h1>Training</h1>
+	<hr />
+	<p>Login > Search Customer > Import Customer</p>
+	<div class="infor" style="margin-top: 50px;">
+		<div class="user-name">
+			<label id="lbUserName">Welcome <% out.println(session.getAttribute("userName")); %></label> 
+		</div>
+		<div class="log-out">
+			<label id="lbLogOut">
+				<a href="/CustomerSystem_Spring/logout.do">Log Out</a>
+			</label>
+		</div>
+	</div>
+	
+	<div class="screen-name">
+		
+	</div>
+	
+	<div class="container">
+		<html:form action="/T004" method="post" enctype="multipart/form-data">
+			<table>
+				
+				<tr>
+					<td>
+						<input id="fileName" type="text" readonly="readonly" maxlength="50" style="display:block;width:300px; height:25px; margin-left: -5px;margin-right: 50px;">
+					</td>
+					<td>
+						 <button type="button" style="display:block;width:120px; height:30px;" onclick='getFile();'>Browser</button>
+  						 
+  						 <html:file property="file" styleClass="getFile"></html:file>
+					</td>
+				</tr>
+				
+			</table>
+			<div style="margin-top: 40px;">
+				<button name="btnImport" id="btnSave" value="btnSave" type="submit">Import</button>
+				<button class="btnCancel" id="btnCancel" style="margin-left: 70px;" type="button" onclick="location.href='http://localhost:8080/CustomerSystem_Spring/T002.do'">Cancel</button>
+			</div>
+		</html:form>
+	</div>
+	<div>
+	</div>
+	<footer>
+		<hr />
+		Copyright (c) 2000-2008 FUJINET, All Rights Reserved.
+	</footer> 
+	<div id="errors" style="display: none;"><html:errors/></div>
+	<div id="messages" style="display: none;"><html:messages id="msg" message="true"><bean:write name="msg"/></html:messages>
+	</div>
+	
+	<script type="text/javascript" defer>
+		
+		let file = document.querySelector("[name=file]");
+		file.addEventListener("change", function(e){
+			let fileName = document.getElementById("fileName");
+			fileName.value = file.value.split( '\\' ).pop();
+		});
+		
+		function getFile(){
+			document.querySelector("[name='file']").click();
+		}
+		
+		window.addEventListener("load", function(){
+		    const errorElement = document.getElementById('errors');
+		    const messageElement = document.getElementById('messages');
+
+		    if (errorElement && errorElement.textContent.trim() !== "") {
+		         setTimeout(function(){
+		              alert(errorElement.textContent.trim());
+		         }, 100);
+		    }
+		    else if (messageElement && messageElement.textContent.trim() !== "") {
+		         setTimeout(function(){
+		              alert(messageElement.textContent.trim());
+		              window.location.href = "/CustomerSystem_Spring/T002.do";
+		         }, 100);
+		    }
+		});
+		
+	</script>
+</body>
+</html>
