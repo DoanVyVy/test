@@ -74,4 +74,160 @@
 </body>
 </html>
 
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="utf-8"%>
 
+<%@ taglib uri="/tags/struts-bean" prefix="bean" %>
+<%@ taglib uri="/tags/struts-html" prefix="html" %>
+<%@ taglib uri="/tags/struts-logic" prefix="logic" %>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Edit</title>
+
+<style type="text/css">
+	<%@include file="../css/T003.css"%>
+</style>
+
+</head>
+<body>
+	<h1>Training</h1>
+	<hr />
+	<p>Login > Search Customer > Edit Customer Infor</p>
+	<div class="infor" style="margin-top: 50px;">
+		<div class="user-name">
+			<label id="lbUserName">Welcome <% out.println(session.getAttribute("userName")); %></label> 
+		</div>
+		<div class="log-out">
+			<label id="lbLogOut">
+				<a href="/CustomerSystem_Spring/logout.do">Log Out</a>
+			</label>
+		</div>
+	</div>
+	
+	<div class="screen-name">
+		<h3>Edit</h3>
+	</div>
+	
+	<div class="container">
+		<label class="errorMessage" id="errorMessage" style="margin-top: 10px;">
+			<html:errors/>
+		</label>
+		<html:form action="/T003" onsubmit="return validateEditForm();">
+			<input type="hidden" name="customerId" value="<% if(request.getParameter("customerId") != null) out.print(request.getParameter("customerId")); %>"/>
+			<table>
+				<tr>
+					<td>
+						<label>
+							Customer Id
+						</label>
+					</td>
+					<td>
+						<label style="margin-left: 20px;">
+							<bean:write name="EditForm" property="customerId"/>
+						</label>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label>
+							Customer Name
+						</label>
+					</td>
+					<td>
+						<html:text property="customerName" name="EditForm" maxlength="50" styleClass="txtCustomerName"></html:text>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label>
+							Sex
+						</label>
+					</td>
+					<td>
+						<html:select property="customerSex" name="EditForm">
+							<html:option value=""></html:option>
+							<html:option value="0">Male</html:option>
+							<html:option value="1">Female</html:option>
+						</html:select>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label>
+							Birthday
+						</label>
+					</td>
+					<td>
+						<html:text property="customerBirthday" name="EditForm" maxlength="10" styleClass="txtBirthday"></html:text>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label>
+							Email
+						</label>
+					</td>
+					<td>
+						<html:text property="customerEmail" name="EditForm" maxlength="40" styleClass="txtEmail"></html:text>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label>
+							Address
+						</label>
+					</td>
+					<td>
+						<html:textarea property="customerAddress" name="EditForm" rows="3" styleClass="txtAddress"></html:textarea>
+					</td>
+				</tr>
+			</table>
+			<html:text property="submitted" value="sunmitted" style="display: none;"></html:text>
+			<div style="margin-top: 40px;">
+				<button name="btnSave" id="btnSave" value="btnSave" type="submit">Save</button>
+				<button id="btnClear" style="margin-left: 150px;" type="button" onclick="resetAll()">Clear</button>
+			</div>
+		</html:form>
+		
+		<html:javascript formName="EditForm"/>
+	</div>
+	<div>
+	</div>
+	<footer>
+		<hr />
+		Copyright (c) 2000-2008 FUJINET, All Rights Reserved.
+	</footer> 
+	<script type="text/javascript" defer>
+	
+		<%@include file="../js/T003.js"%>
+		
+		function onSave(){
+			let txtBirthday = document.getElementById('txtBirthday');
+			let txtEmail = document.getElementById('txtEmail');
+			let errorMessage = document.getElementById('errorMessage');
+			
+			if(txtBirthday.value != "" && !isValidDate(txtBirthday.value)){
+				errorMessage.innerText = "誕生日が不正です。";
+				return false;
+			}
+			
+			if(txtEmail.value != "" && !isValidEmail(txtEmail.value)){
+				errorMessage.innerText = "メールアドレスが不正です。";
+				return false;
+			}
+			
+			return true;
+		}
+		
+		const address = document.querySelector('[name="customerAddress"]');
+		address.addEventListener('input', function(){
+			if(this.value.length > 256){
+				this.value = this.value.substring(0, 256);
+			}
+		})
+		
+	</script>
+</body>
+</html>
