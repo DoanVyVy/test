@@ -1,223 +1,75 @@
-+ 1 project có nhiều link, file (css,js). Thì em sẽ tiến hành filter sao cho link có thể chạy được khi có session
-     như là em có 3 link là logon.do, search.do, edit.do => lúc này em security filter search.do và edit.do, khi nào tôn tại session thì mới cho hiển thị. Còn logon.do thì không cần filter
-    Mở rộng hơn nữa thì em sẽ có link localhost:8080/CustomerSystem/Logon.do, trường hợp chưa logon mà người dùng copy link  localhost:8080/CustomerSystem/Search.do thì sẽ bị chặn không vào được
-    Tương tự cho các link khác như là CallDo.do, Abc.do , những link này ko có trong project mình thì cũng không vào được
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="/tags/struts-bean" prefix="bean" %>
+<%@ taglib uri="/tags/struts-html" prefix="html" %>
+<%@ taglib uri="/tags/struts-logic" prefix="logic" %>
+<%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Login</title>
+<style type="text/css">
+	<%@include file="../css/T001.css"%>
+</style>
+</head>
+<body>
+	<h1>Training</h1>
+	<hr />
+	<h3>Login</h3>
+	<div class="container">
 
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE hibernate-configuration PUBLIC
-	"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
-	"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
-<hibernate-configuration>  
-   <session-factory>  
-      <property name="connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>  
-      <property name="connection.url">jdbc:sqlserver://172.16.10.73:1433;databaseName=CustomerSystem_Vy</property>  
-      <property name="connection.username">vy-dv</property>  
-      <property name="connection.password">Doanvyvy123</property>  
-      <property name="hbm2ddl.auto">update</property>
-      <property name="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</property>  
-      <property name="hibernate.current_session_context_class">thread</property>
-   </session-factory>  
-</hibernate-configuration>
+		<h2>LOGIN</h2>
 
-Referenced file contains errors (http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd).  For more information, right click on the message in the Problems View and select "Show Details..."
+		<label class="errorMessage" id="lbErrorMessage">
+			<html:errors/>
+		</label>
+		
+		<html:form action="/T001">
+			<table>
+				<tr>
+					<td>
+						<label>UserId:</label>
+					</td>
+					<td>
+						<html:text name="LoginForm" property="userId" maxlength="8" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label>Password:</label>
+					</td>
+					<td>
+						<html:password name="LoginForm" property="password" maxlength="8"/>
+					</td>
+				</tr>
+			</table>
+			<div style="margin-top: 40px;">
+				<button name="btnLogin" id="btnLogin" type="submit" value="btnSubmit">Login</button>
+				<button id="btnClear" style="margin-left: 150px;" type="button" onclick="resetAll()">Clear</button>
+			</div>
+		</html:form>
+		
+		<html:javascript formName="LoginForm"/>
+	</div>
 
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<!DOCTYPE web-app
-  PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
-  "http://java.sun.com/dtd/web-app_2_3.dtd">
-<web-app>
-  <display-name>Struts Blank Application</display-name>
-  
-  <context-param>
-    <param-name>contextConfigLocation</param-name>
-    <param-value>/WEB-INF/applicationContext.xml</param-value>
-  </context-param>
-  
-  <!-- Định nghĩa Filter để kiểm tra session -->
-  <filter>
-    <filter-name>AuthenticationFilter</filter-name>
-    <filter-class>com.yourpackage.AuthenticationFilter</filter-class>
-  </filter>
-  
-  <filter-mapping>
-    <filter-name>AuthenticationFilter</filter-name>
-    <url-pattern>*.do</url-pattern>
-  </filter-mapping>
-  
-  <listener>
-    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-  </listener>
-  
-  <!-- Cấu hình Servlet cho Struts -->
-  <servlet>
-    <servlet-name>action</servlet-name>
-    <servlet-class>org.apache.struts.action.ActionServlet</servlet-class>
-    <init-param>
-      <param-name>config</param-name>
-      <param-value>/WEB-INF/struts-config.xml</param-value>
-    </init-param>
-    <init-param>
-      <param-name>debug</param-name>
-      <param-value>2</param-value>
-    </init-param>
-    <init-param>
-      <param-name>detail</param-name>
-      <param-value>2</param-value>
-    </init-param>
-    <load-on-startup>2</load-on-startup>
-  </servlet>
-  
-  <!-- Mapping cho Struts ActionServlet -->
-  <servlet-mapping>
-    <servlet-name>action</servlet-name>
-    <url-pattern>*.do</url-pattern>
-  </servlet-mapping>
-  
-  <!-- Danh sách welcome file -->
-  <welcome-file-list>
-    <welcome-file>index.jsp</welcome-file>
-  </welcome-file-list>
-  
-  <!-- Struts Tag Library Descriptors -->
-  <taglib>
-    <taglib-uri>/tags/struts-bean</taglib-uri>
-    <taglib-location>/WEB-INF/struts-bean.tld</taglib-location>
-  </taglib>
-  
-  <taglib>
-    <taglib-uri>/tags/struts-html</taglib-uri>
-    <taglib-location>/WEB-INF/struts-html.tld</taglib-location>
-  </taglib>
-  
-  <taglib>
-    <taglib-uri>/tags/struts-logic</taglib-uri>
-    <taglib-location>/WEB-INF/struts-logic.tld</taglib-location>
-  </taglib>
-  
-  <taglib>
-    <taglib-uri>/tags/struts-nested</taglib-uri>
-    <taglib-location>/WEB-INF/struts-nested.tld</taglib-location>
-  </taglib>
-  
-  <taglib>
-    <taglib-uri>/tags/struts-tiles</taglib-uri>
-    <taglib-location>/WEB-INF/struts-tiles.tld</taglib-location>
-  </taglib>
-</web-app>
+	<footer>
+		<hr />
+		Copyright (c) 2000-2008 FUJINET, All Rights Reserved.
+	</footer>
 
-The content of element type "web-app" must match "(icon?,display-name?,description?,distributable?,context-param*,servlet*,servlet-mapping*,session-config?,mime-mapping*,welcome-file-list?,error-page*,taglib*,resource-ref*,security-constraint*,login-config?,security-role*,env-entry*,ejb-ref*)".
+	<script type="text/javascript" defer>
+	
+		function resetAll() {
+			const errorMessage = document.getElementById("lbErrorMessage");
+			if(errorMessage){
+				errorMessage.innerText = "";
+			}
+			document.querySelector('[name="userId"]').value = "";
+			document.querySelector('[name="password"]').value = "";
+		}
+		
+	</script>
 
-<?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:context="http://www.springframework.org/schema/context"
-  xsi:schemaLocation="http://www.springframework.org/schema/beans
-    http://www.springframework.org/schema/beans/spring-beans.xsd
-    http://www.springframework.org/schema/context
-    http://www.springframework.org/schema/context/spring-context.xsd">
-    
-	<bean id="sessionFactory"
-        class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
-        <property name="dataSource" ref="dataSource" />
-        <property name="configLocation" value="classpath:hibernate.cfg.xml" />
-    </bean>
-     
-    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
-        <property name="url" value="jdbc:sqlserver://172.16.10.73:1433;databaseName=CustomerSystem_Vy" />
-        <property name="username" value="vy-dv" />
-        <property name="password" value="Doanvyvy123" />
-    </bean>
-    
-    <bean id="transactionManager"
-        class="org.springframework.orm.hibernate3.HibernateTransactionManager">
-        <property name="sessionFactory" ref="sessionFactory" />
-    </bean>
-    
-    <bean id="UserService" class="fjs.cs.service.UserService">
-    	<property name="sessionFactory" ref="sessionFactory" />
-    </bean>
-    
-    <bean id="CustomerService" class="fjs.cs.service.CustomerService">
-    	<property name="sessionFactory" ref="sessionFactory" />
-    </bean>
-
-</beans>
-package com.yourpackage;
-
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-public class AuthenticationFilter implements Filter {
-
-    // Danh sách các URL được phép truy cập (ngoại trừ login.do)
-    private Set<String> allowedURIs = new HashSet<>();
-
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-        // Chỉ cần login.do được phép truy cập tự do nên không cần thêm vào danh sách này.
-        // Các URL khác trong danh sách đều cần xác thực (session hợp lệ).
-        allowedURIs.add("logout.do");
-        allowedURIs.add("export.do");
-        allowedURIs.add("T001.do");
-        allowedURIs.add("T002.do");
-        allowedURIs.add("T003.do");
-        allowedURIs.add("T004.do");
-        allowedURIs.add("T005.do");
-    }
-
-    @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-             throws IOException, ServletException {
-
-        HttpServletRequest httpRequest  = (HttpServletRequest) request;
-        HttpServletResponse httpResponse = (HttpServletResponse) response;
-
-        // Lấy URI của request và loại bỏ phần context path
-        String uri         = httpRequest.getRequestURI();
-        String contextPath = httpRequest.getContextPath();
-        // Ví dụ: nếu URI là /CustomerSystem/T002.do, resource sẽ là T002.do
-        String resource    = uri.substring(contextPath.length() + 1);
-
-        // Nếu truy cập login.do thì cho phép luôn, không cần xác thực
-        if ("login.do".equals(resource)) {
-            chain.doFilter(request, response);
-            return;
-        }
-
-        // Nếu resource không nằm trong danh sách các URL được phép truy cập, từ chối truy cập
-        if (!allowedURIs.contains(resource)) {
-            httpResponse.sendError(HttpServletResponse.SC_NOT_FOUND, "Resource not found.");
-            return;
-        }
-
-        // Đối với các URL cần bảo vệ (không phải login.do), kiểm tra session
-        HttpSession session = httpRequest.getSession(false);
-        if (session == null || session.getAttribute("user") == null) {
-            // Nếu chưa đăng nhập, chuyển hướng về trang login
-            httpResponse.sendRedirect(contextPath + "/login.do");
-            return;
-        }
-
-        // Nếu đã đăng nhập và URL hợp lệ, cho phép truy cập
-        chain.doFilter(request, response);
-    }
-
-    @Override
-    public void destroy() {
-        // Giải phóng tài nguyên nếu cần
-    }
-}
-<!DOCTYPE hibernate-configuration PUBLIC
-    "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
-    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+</body>
+</html>
