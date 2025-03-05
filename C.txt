@@ -1,0 +1,14 @@
+<%@ page import="org.apache.tiles.AttributeContext, org.apache.tiles.Attribute" %>
+<%
+    // Lấy đối tượng AttributeContext được lưu trong request với key mặc định của Tiles
+    AttributeContext tilesContext = (AttributeContext) request.getAttribute("org.apache.tiles.AttributeContext");
+    if (tilesContext != null) {
+        java.util.Map<String, Attribute> attributes = tilesContext.getAttributes();
+        for (java.util.Map.Entry<String, Attribute> entry : attributes.entrySet()) {
+            // Log ra key và giá trị của attribute (giá trị thật có thể cần cast hoặc toString tùy trường hợp)
+            System.out.println("Tiles Attribute: " + entry.getKey() + " = " + entry.getValue().getValue());
+        }
+    } else {
+        System.out.println("Không tìm thấy AttributeContext của Tiles.");
+    }
+%>
