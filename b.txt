@@ -171,3 +171,17 @@
     <taglib-location>/WEB-INF/struts-tiles.tld</taglib-location>
   </taglib>
 </web-app>
+3 05, 2025 4:40:47 午後 org.apache.catalina.core.StandardWrapperValve invoke
+重大: Servlet.service() for servlet [action] in context with path [/CustomerSystem_Spring] threw exception [An exception occurred processing JSP page [/WEB-INF/jsp/T001.jsp] at line [56]
+
+53: 		<html:javascript formName="LoginForm"/>
+54: 	</div>
+55: 	
+56: 	<tiles:insert name="footer" attribute="footer"/>
+57: 	
+58: 	<footer>
+59: 		<hr />
+
+
+Stacktrace:] with root cause
+java.lang.NullPointerException
