@@ -189,3 +189,5 @@ java.lang.NullPointerException
 
 Stacktrace:] with root cause
 java.lang.NullPointerException
+
+javax.servlet.jsp.JspException: Error - tag.getAsString : component context is not defined. Check tag syntax
