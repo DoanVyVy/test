@@ -1,1 +1,88 @@
-Error - tag.getAsString : component context is not defined. Check tag syntax
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+ <!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+       "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
+
+<tiles-definitions>
+	
+	<definition name="T001" path="/WEB-INF/jsp/T001.jsp">
+		<put name="title" value="This is title"/>
+		<put name="footer" value="/WEB-INF/jsp/footer.jsp"/>
+	</definition>
+	
+</tiles-definitions>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="/tags/struts-bean" prefix="bean" %>
+<%@ taglib uri="/tags/struts-html" prefix="html" %>
+<%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Login</title>
+<style type="text/css">
+	<%@include file="../css/T001.css"%>
+</style>
+</head>
+	<h1>Training</h1>
+	<hr />
+	<h3>Login</h3>
+	
+	<div class="container">
+
+		<h2>LOGIN</h2>
+
+		<label class="errorMessage" id="lbErrorMessage">
+			<html:errors/>
+		</label>
+		
+		<html:form action="/T001">
+			<table>
+				<tr>
+					<td>
+						<label>UserId:</label>
+					</td>
+					<td>
+						<html:text name="LoginForm" property="userId" maxlength="8" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label>Password:</label>
+					</td>
+					<td>
+						<html:password name="LoginForm" property="password" maxlength="8"/>
+					</td>
+				</tr>
+			</table>
+			<div style="margin-top: 40px;">
+				<button name="btnLogin" id="btnLogin" type="submit" value="btnSubmit">Login</button>
+				<button id="btnClear" style="margin-left: 150px;" type="button" onclick="resetAll()">Clear</button>
+			</div>
+		</html:form>
+		
+		<html:javascript formName="LoginForm"/>
+	</div>
+		<tiles:insert name="title"/>
+	<footer>
+		<hr />
+		Copyright (c) 2000-2008 FUJINET, All Rights Reserved.
+	</footer>
+
+	<script type="text/javascript" defer>
+	
+		function resetAll() {
+			const errorMessage = document.getElementById("lbErrorMessage");
+			if(errorMessage){
+				errorMessage.innerText = "";
+			}
+			document.querySelector('[name="userId"]').value = "";
+			document.querySelector('[name="password"]').value = "";
+		}
+		
+	</script>
+
+</body>
+</html>
