@@ -1,14 +1,36 @@
-<%@ page import="org.apache.tiles.AttributeContext, org.apache.tiles.Attribute" %>
-<%
-    // Lấy đối tượng AttributeContext được lưu trong request với key mặc định của Tiles
-    AttributeContext tilesContext = (AttributeContext) request.getAttribute("org.apache.tiles.AttributeContext");
-    if (tilesContext != null) {
-        java.util.Map<String, Attribute> attributes = tilesContext.getAttributes();
-        for (java.util.Map.Entry<String, Attribute> entry : attributes.entrySet()) {
-            // Log ra key và giá trị của attribute (giá trị thật có thể cần cast hoặc toString tùy trường hợp)
-            System.out.println("Tiles Attribute: " + entry.getKey() + " = " + entry.getValue().getValue());
+package com.example.action;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.tiles.Attribute;
+import org.apache.tiles.AttributeContext;
+
+import java.util.Map;
+
+public class T001Action extends Action {
+
+    @Override
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+                                 HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        // Lấy AttributeContext được Tiles lưu trong request
+        AttributeContext tilesContext = (AttributeContext) request.getAttribute("org.apache.tiles.AttributeContext");
+        if (tilesContext != null) {
+            Map<String, Attribute> attributes = tilesContext.getAttributes();
+            for (Map.Entry<String, Attribute> entry : attributes.entrySet()) {
+                // Log ra key và giá trị của attribute
+                System.out.println("Tiles Attribute: " + entry.getKey() + " = " + entry.getValue().getValue());
+            }
+        } else {
+            System.out.println("Không tìm thấy AttributeContext của Tiles.");
         }
-    } else {
-        System.out.println("Không tìm thấy AttributeContext của Tiles.");
+        
+        // Trả về forward theo cấu hình (ví dụ: "success")
+        return mapping.findForward("success");
     }
-%>
+}
