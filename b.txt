@@ -1,9 +1,30 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<c:set var="currentPage" value="${param.page}" />
+<c:choose>
+    <c:when test="${currentPage eq 'login'}">
+        <c:set var="breadcrumb" value="Login" />
+        <c:set var="screenTitle" value="Login" />
+    </c:when>
+    <c:when test="${currentPage eq 'search'}">
+        <c:set var="breadcrumb" value="Login > Search Customer" />
+        <c:set var="screenTitle" value="Search Customer" />
+    </c:when>
+    <c:when test="${currentPage eq 'edit'}">
+        <c:set var="breadcrumb" value="Login > Search Customer > Edit Customer Infor" />
+        <c:set var="screenTitle" value="Edit Customer Infor" />
+    </c:when>
+    <c:otherwise>
+        <c:set var="breadcrumb" value="Login" />
+        <c:set var="screenTitle" value="Login" />
+    </c:otherwise>
+</c:choose>
+
 <h1>Training</h1>
 <hr />
-<p>Login > Search Customer > Edit Customer Infor</p>
+<p>${breadcrumb}</p>
 <div class="infor" style="margin-top: 50px;">
 	<div class="user-name">
-		<label id="lbUserName">Welcome <% out.println(session.getAttribute("userName")); %></label> 
+		<label id="lbUserName">Welcome ${sessionScope.userName}</label> 
 	</div>
 	<div class="log-out">
 		<label id="lbLogOut">
@@ -13,5 +34,5 @@
 </div>
 	
 <div class="screen-name">
-	<h3>Edit</h3>
+	<h3>${screenTitle}</h3>
 </div>
