@@ -1,41 +1,24 @@
-package com.example.action;
-
-import java.util.Iterator;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.tiles.Definition;
-import org.apache.struts.tiles.TilesUtil;
-
-public class T001Action extends Action {
-
-    @Override
-    public ActionForward execute(ActionMapping mapping, ActionForm form,
-                                 HttpServletRequest request, HttpServletResponse response)
-                                 throws Exception {
-        // Lấy định nghĩa tile hiện hành thông qua TilesUtil của Struts
-        Definition def = TilesUtil.getCurrentDefinition(request);
-        if (def != null) {
-            Map attributes = def.getAttributes();
-            if (attributes != null && !attributes.isEmpty()) {
-                Iterator it = attributes.entrySet().iterator();
-                while (it.hasNext()) {
-                    Map.Entry entry = (Map.Entry) it.next();
-                    System.out.println("Tiles Attribute: " + entry.getKey() + " = " + entry.getValue());
-                }
-            } else {
-                System.out.println("Không tìm thấy thuộc tính nào trong định nghĩa Tiles hiện hành.");
-            }
-        } else {
-            System.out.println("Không tìm thấy định nghĩa Tiles hiện hành.");
-        }
-        // Tiếp tục xử lý Action, ví dụ forward tới "success"
-        return mapping.findForward("success");
-    }
-}
+9-12 phổ biến công việc, cài đặt môi trường lập trình, đọc quy định
+10-12 làm màn hình login
+11-12 done login
+12-12 training về bảo mật và an toàn thông tin 14h
+12 - 12 search
+19-12 done
+18-20 edit
+20-23 login
+25-30 search 
+31 edit
+2-8 login
+8-10 search
+10-13 edit
+14-16 search bo sung
+10-12 import
+12-18 setting header
+19 check list login search
+20 edit
+21 con lại, chụp edviice cho màn login
+22 search
+24 - 26 còn lại
+27 Thực hiện Security filters cho project
+28 Viết checklist và chụp evidence cho Security filters
+01-07 Áp dụng Tiles vào project
